@@ -1,0 +1,52 @@
+{% load static %}
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm fixed-top">
+    <div class="container-fluid">
+
+        <!-- Brand: Logo + Name -->
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="{% static 'images/logo-IT.png' %}" alt="Logo" width="40" height="40" class="me-2">
+            <span class="fw-bold fst-italic fs-3 text-light text-uppercase">Spotify</span>
+        </a>
+
+        <!-- Toggle button (for mobile view) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Main navbar content -->
+        <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+            <!-- Centered Navigation links -->
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item mx-3">
+                    <a class="nav-link fs-6 {% if request.path == '/' %}text-light bg-dark rounded px-3{% endif %}" href="/">Home</a>
+                </li>
+                <li class="nav-item mx-3">
+                    <a class="nav-link fs-6 {% if request.path == '/profile/' %}text-light bg-dark rounded px-3{% endif %}" href="{% url 'profile' %}">Profile</a>
+                </li>
+                <li class="nav-item mx-3">
+                    <a class="nav-link fs-6 {% if request.path == '/song/favorites/' %}text-light bg-dark rounded px-3{% endif %}" href="{% url 'favorites' %}">Favorites</a>
+                </li>
+                <li class="nav-item mx-3">
+                    <a class="nav-link fs-6 {% if request.path == '/album/' %}text-light bg-dark rounded px-3{% endif %}" href="{% url 'albums' %}">Albums</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Auth buttons on the right -->
+        <div class="d-flex align-items-center">
+            {% if user.is_authenticated %}
+                <span class="navbar-text me-3 text-white">
+                    👋 Hi, <strong>{{ user.username }}</strong>
+                </span>
+                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-light me-2">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-outline-light">Sign Up</a>
+            {% endif %}
+        </div>
+
+    </div>
+</nav>

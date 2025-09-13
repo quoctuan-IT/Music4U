@@ -1,0 +1,14 @@
+<div class="text-center my-4">
+        <h4 class="mb-2 text-success fw-bold">🎶🎶</h4>
+        <p id="nowPlaying" class="text-muted">No song playing</p>
+
+        <audio id="audioPlayer" controls class="w-50 mb-3">
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <div class="d-flex justify-content-center gap-3">
+            <button class="btn btn-outline-danger" onclick="togglePlay()">⏸</button>
+            <button class="btn btn-outline-secondary" onclick="playNextSong()">⏭</button>
+        </div>
+    </div>

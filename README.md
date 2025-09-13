@@ -35,7 +35,9 @@ cd Music4U
 # Create Virtual Environment on Windows
 python -m venv venv
 venv\Scripts\activate
-    
+# Deactivate Virtual Environment
+deactivate
+
 # Install Dependencies
 pip install -r requirements.txt
 
@@ -47,7 +49,5 @@ python manage.py migrate
 python manage.py createsuperuser
 
 # Run the server
+cd source
 python manage.py runserver
-
-# Deactivate Virtual Environment on Windows
-deactivate

@@ -1,0 +1,65 @@
+{% extends "base_login.html" %}
+
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<main class="form-signin w-100 m-auto">
+
+  {% include 'partials/message.html' %}
+
+  <form method="POST" class="needs-validation" novalidate>
+    {% csrf_token %}
+
+    <img class="mb-4" src="{% static 'images/logo-IT.png' %}" alt="" width="200" height="200">
+
+    <h1 class="h3 mb-3 fw-normal">REGISTER</h1>
+
+    <!-- Username -->
+    <div class="form-floating mb-3">
+      {{ form.username }}
+      <label for="{{ form.username.id_for_label }}">Username</label>
+      {% if form.username.errors %}
+      <div class="text-danger mt-1">{{ form.username.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Email -->
+    <div class="form-floating mb-3">
+      {{ form.email }}
+      <label for="{{ form.email.id_for_label }}">Email</label>
+      {% if form.email.errors %}
+      <div class="text-danger mt-1">{{ form.email.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Password1 -->
+    <div class="form-floating mb-3">
+      {{ form.password1 }}
+      <label for="{{ form.password1.id_for_label }}">Password</label>
+      {% if form.password1.errors %}
+      <div class="text-danger mt-1">{{ form.password1.errors }}</div>
+      {% endif %}
+    </div>
+
+    <!-- Password2 -->
+    <div class="form-floating mb-3">
+      {{ form.password2 }}
+      <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+      {% if form.password2.errors %}
+      <div class="text-danger mt-1">{{ form.password2.errors }}</div>
+      {% endif %}
+    </div>
+
+    <p class="mt-3 text-center">
+      Already have account? <a href="{% url 'login' %}" class="text-info">LOGIN</a>
+    </p>
+
+    <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+
+    <p class="mt-5 mb-3 text-body-secondary text-center">&copy; IT–SGU</p>
+  </form>
+
+</main>
+{% endblock %}

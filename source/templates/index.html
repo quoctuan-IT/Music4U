@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+{% include 'partials/navbar.html' %}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">Newest Songs 🎵</h2>
+        <p class="text-muted">Top trending songs</p>
+    </div>
+
+    {% if songs %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for song in songs %}
+                {% include 'partials/song_col.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            🎵 No hot songs available at the moment.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
