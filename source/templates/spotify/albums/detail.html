@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Album: {{ album.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-4">
+    <div class="mb-1 d-flex gap-5">
+        <h2 class="fw-bold">Album: {{ album.name }} 🎧🎵</h2>
+        <button class="btn btn-outline-primary" onclick="playAllSongs()">▶️ Play All</button>
+    </div>
+
+    <p>Saved by <strong>{{ user.username }}</strong></p>
+
+    {% if album.songs.all %}
+
+    <!-- Now Playing Section -->
+    {% include 'partials/playing_section.html' %}
+
+    <!-- Song List -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">🎧 My Album Songs</h5>
+        </div>
+
+        <ul class="list-group list-group-flush" id="songList">
+            {% for song in album.songs.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center song-item"
+                data-index="{{ forloop.counter0 }}">
+                <div class="d-flex align-items-center gap-3">
+                    <!-- <span class="fs-5">🎵</span> -->
+                    <img src="{{ song.cover_image.url }}" height="50" width="50">
+
+                    <div>
+                        <div class="fw-bold">{{ song.title }}</div>
+                        <small class="text-muted">{{ song.artist }}</small>
+                    </div>
+                </div>
+
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'remove_song_album' album.id song.id %}"
+                    onclick="return confirm('Are you sure to remove this song?')">
+                    🗑️ Delete
+                </a>
+            </li>
+            {% empty %}
+            <li class="list-group-item text-center">No favorite songs found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        🎵 You don't have any favorite songs yet.
+    </div>
+    {% endif %}
+</div>
+
+
+<script>
+    const songs = [
+        {% for song in album.songs.all %}
+        {
+            title: "{{ song.title|escapejs }}",
+                artist: "{{ song.artist|escapejs }}",
+                    url: "{{ song.audio_file.url }}"
+        },
+        {% endfor %}
+    ];
+
+    let currentIndex = 0;
+    const player = document.getElementById("audioPlayer");
+    const nowPlaying = document.getElementById("nowPlaying");
+    const songList = document.querySelectorAll(".song-item");
+
+    function highlightCurrentSong() {
+        songList.forEach(item => item.classList.remove("bg-success", "text-white"));
+        if (songList[currentIndex]) {
+            songList[currentIndex].classList.add("bg-success", "text-white");
+        }
+    }
+
+    function playAllSongs() {
+        if (songs.length === 0) return;
+
+        currentIndex = 0;
+        player.src = songs[currentIndex].url;
+        player.play();
+        updateNowPlaying();
+        highlightCurrentSong();
+    }
+
+    function playNextSong() {
+        currentIndex++;
+        if (currentIndex < songs.length) {
+            player.src = songs[currentIndex].url;
+            player.play();
+            updateNowPlaying();
+            highlightCurrentSong();
+        } else {
+            nowPlaying.innerText = "All songs played.";
+        }
+    }
+
+    function togglePlay() {
+        if (player.paused) {
+            player.play();
+        } else {
+            player.pause();
+        }
+    }
+
+    function updateNowPlaying() {
+        nowPlaying.innerText = `🎧 ${songs[currentIndex].title} - ${songs[currentIndex].artist}`;
+    }
+
+    // Auto play next song
+    player.onended = playNextSong;
+</script>
+
+{% endblock %}

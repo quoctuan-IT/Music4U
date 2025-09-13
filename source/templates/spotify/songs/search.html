@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Search 🔍{% endblock %}
+
+{% block content %}
+
+{% include 'partials/navbar.html' %}
+
+<div class="container py-5">
+    <h2 class="mb-4">🔍 Search: {{ query }}</h2> 
+
+    <!-- Results -->
+    {% if songs %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {% for song in songs %}
+                {% include 'partials/song_col.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning text-center" role="alert">
+            😢 No songs found.
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

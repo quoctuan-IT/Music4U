@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Profile - {{ user.username }}
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="p-4 row justify-content-md-center">
+        <div class="col-md-5">
+
+            <h2 class="mb-4 text-center fw-bold">My Profile 🎧</h2>
+
+            <dl class="row">
+                <dt class="col-sm-3">Username:</dt>
+                <dd class="col-sm-9">{{ user.username }}</dd>
+
+                <dt class="col-sm-3">Email:</dt>
+                <dd class="col-sm-9">{{ user.email }}</dd>
+
+                <dt class="col-sm-3">First Name:</dt>
+                <dd class="col-sm-9">{{ user.first_name }}</dd>
+
+                <dt class="col-sm-3">Last Name:</dt>
+                <dd class="col-sm-9">{{ user.last_name }}</dd>
+
+                <dt class="col-sm-3">Date Joined:</dt>
+                <dd class="col-sm-9">{{ user.date_joined|date:"F j, Y" }}</dd>
+            </dl>
+            <hr>
+            <div class="d-flex justify-content-start gap-3">
+                <a href="{% url 'favorites' %}" class="btn btn-success">🎵 My Favorite Songs</a>
+                <a href="{% url 'albums' %}" class="btn btn-success">💿 My Albums</a>
+
+                {% if user.is_staff %}
+                <a href="/admin" class="btn btn-info">Admin site</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

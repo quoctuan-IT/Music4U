@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&v2#zayc+=a&3aym1rsdx5d3l$6ec%(j98mr*kdq-hvgx0ojon
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -74,8 +75,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'MUSIC4U',
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -114,7 +119,22 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",   # project_root/static/
+]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Media files (MP3, MP4, Images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
+
+# Login
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = 'login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -77,4 +77,6 @@ venv.bak/
 .cursorindexingignore
 
 # Project specific
+staticfiles/
+media/
 NOTE.txt

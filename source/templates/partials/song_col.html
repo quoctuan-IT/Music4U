@@ -1,0 +1,29 @@
+{% load static %}
+
+<div class="col">
+    <div class="card h-100 shadow-sm border-0">
+        <a href="{% url 'song_detail' song.id %}">
+            {% if song.cover_image %}
+            <img src="{{ song.cover_image.url }}" class="card-img-top" alt="{{ song.title }}" height="180">
+            {% else %}
+            <img src="{% static 'images/logo-IT.png' %}" class="card-img-top" alt="" height="180">
+            {% endif %}
+        </a>
+
+        <div class="card-body text-center">
+            <h5 class="card-title">{{ song.title }}</h5>
+            <p class="card-text text-light">{{ song.artist }}</p>
+        </div>
+
+        <div class="card-footer text-center border-0 bg-transparent">
+            <button class="btn btn-outline-light btn-sm btn-favorite" data-song-id="{{ song.id }}">
+                {% if song in user.favorite_songs.all %}
+                ❤️ Liked
+                {% else %}
+                🤍 Like
+                {% endif %}
+            </button>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,45 @@
+<div class="container pt-5">
+    <div class="card-body">
+        <form method="get" action="{% url 'search' %}" class="row align-items-end justify-content-md-center">
+            <!-- Tìm theo tên bài hát -->
+            <div class="col-md-4">
+                <label for="searchInput" class="form-label fw-semibold">🔍 Search</label>
+                <input type="text" class="form-control" id="searchInput" name="query" placeholder="Enter song title"
+                    value="{{ query }}">
+            </div>
+
+            <!-- Lọc theo nghệ sĩ -->
+            <div class="col-md-3">
+                <label for="artistSelect" class="form-label fw-semibold">🎤 Filter by Artist</label>
+                <select class="form-select" id="artistSelect" name="artist">
+                    <option value="">All artists</option>
+                    {% for artist in artists %}
+                        <option value="{{ artist.id }}"
+                            {% if artist.id == selected_artist %}selected{% endif %}>
+                            {{ artist.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Lọc theo thể loại -->
+            <div class="col-md-3">
+                <label for="genreSelect" class="form-label fw-semibold">🎼 Filter by Genre</label>
+                <select class="form-select" id="genreSelect" name="genre">
+                    <option value="">All genres</option>
+                    {% for genre in genres %}
+                        <option value="{{ genre.id }}" 
+                            {% if genre.id == selected_genre %}selected{% endif %}>
+                            {{ genre.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Nút tìm kiếm -->
+            <div class="col-md-1 d-grid">
+                <button type="submit" class="btn btn-success">🔍</button>
+            </div>
+        </form>
+    </div>
+</div>
