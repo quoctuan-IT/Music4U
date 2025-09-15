@@ -14,22 +14,29 @@ admin.site.register(Genre)
 admin.site.register(Artist)
 
 
-class CustomUserAdmin(BaseUserAdmin):    
+class CustomUserAdmin(BaseUserAdmin):
     # Add 'favorite_songs' to fieldsets
     fieldsets = BaseUserAdmin.fieldsets + (
-        ('Favorites', {
-            'fields': ('favorite_songs',),
-        }),
+        (
+            "Favorites",
+            {
+                "fields": ("favorite_songs",),
+            },
+        ),
     )
 
     # `add_fieldsets` for form to create new User):
     add_fieldsets = BaseUserAdmin.add_fieldsets + (
-        ('Favorites', {
-            'fields': ('favorite_songs',),
-        }),
+        (
+            "Favorites",
+            {
+                "fields": ("favorite_songs",),
+            },
+        ),
     )
 
-    filter_horizontal = ('favorite_songs',)  # Allow to select multiple songs
+    # Allow to select multiple songs
+    filter_horizontal = ("favorite_songs",)
 
 
 # Unregister default User

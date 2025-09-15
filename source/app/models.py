@@ -14,7 +14,7 @@ class Genre(models.Model):
 class Artist(models.Model):
     name = models.CharField(max_length=255)
     bio = models.TextField(blank=True)
-    image = models.ImageField(upload_to='artists/', null=True, blank=True)
+    image = models.ImageField(upload_to="artists/", null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -22,15 +22,17 @@ class Artist(models.Model):
 
 class Song(models.Model):
     title = models.CharField(max_length=255)
-    cover_image = models.ImageField(upload_to='covers/', null=True, blank=True)
+    cover_image = models.ImageField(upload_to="covers/", null=True, blank=True)
     audio_file = models.FileField(
-        upload_to='songs/',
-        validators=[FileExtensionValidator(allowed_extensions=['mp3'])]
+        upload_to="songs/",
+        validators=[FileExtensionValidator(allowed_extensions=["mp3"])],
     )
     lyrics = models.TextField(blank=True)
 
-    artist = models.ForeignKey(Artist, on_delete=models.SET_NULL, null=True, related_name='songs')
-    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, related_name='songs')
+    artist = models.ForeignKey(
+        Artist, on_delete=models.SET_NULL, null=True, related_name="songs"
+    )
+    genres = models.ManyToManyField(Genre, blank=True, related_name="songs")
     uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -49,6 +51,6 @@ class Album(models.Model):
 
 
 User.add_to_class(
-    'favorite_songs',
-    models.ManyToManyField(Song, related_name='favorited_by', blank=True)
+    "favorite_songs",
+    models.ManyToManyField(Song, related_name="favorited_by", blank=True),
 )
