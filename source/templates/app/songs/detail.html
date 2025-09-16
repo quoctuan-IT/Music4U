@@ -2,22 +2,21 @@
 
 {% load static %}
 
-{% block title %}
-    {{ song.title }} - {{ song.artist }} 🎵
-{% endblock %}
+{% block title %}{{ song.title }} - {{ song.artist }} 🎵{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
 
-            <!-- Card thông tin bài hát -->
+            <!-- Song card -->
             {% if song %}
             <div class="card shadow-lg border-0 mb-4 bg-dark text-white">
+
                 {% if song.cover_image %}
-                    <img src="{{ song.cover_image.url }}" class="card-img-top" alt="{{ song.title }}" height="300">
+                <img src="{{ song.cover_image.url }}" class="card-img-top" alt="{{ song.title }}" height="300">
                 {% else %}
-                    <img src="{% static 'images/Error.png' %}" class="card-img-top" alt="No Cover" height="300">
+                <img src="{% static 'images/Error.png' %}" class="card-img-top" alt="No Cover" height="300">
                 {% endif %}
 
                 <div class="card-body">
@@ -31,20 +30,18 @@
                     <div class="my-4">
                         <audio controls class="w-100">
                             <source src="{{ song.audio_file.url }}" type="audio/mpeg">
-                            Trình duyệt của bạn không hỗ trợ phát nhạc.
+                            Your browser does not support the audio element.
                         </audio>
                     </div>
 
-                    <!-- Yêu thích -->
                     <div class="mb-3">
                         {% if song in user.favorite_songs.all %}
-                            <button class="btn btn-light btn-favorite" data-song-id="{{ song.id }}">❤️ Liked</button>
+                        <button class="btn btn-light btn-favorite" data-song-id="{{ song.id }}">❤️ Liked</button>
                         {% else %}
-                            <button class="btn btn-outline-light btn-favorite" data-song-id="{{ song.id }}">🤍 Like</button>
+                        <button class="btn btn-outline-light btn-favorite" data-song-id="{{ song.id }}">🤍 Like</button>
                         {% endif %}
                     </div>
 
-                    <!-- Thông tin upload -->
                     <div class="text-muted small text-end">
                         Uploaded by: {{ song.uploaded_by.username }} on {{ song.created_at|date:"d/m/Y" }}
                     </div>
@@ -52,36 +49,39 @@
             </div>
             {% endif %}
 
-            <!-- Form thêm vào album -->
+            <!-- Form add Song to Album -->
             {% if user.is_authenticated %}
-                <div class="card bg-secondary mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title">➕ Add song to your album</h5>
+            <div class="card bg-secondary mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">➕ Add to Album</h5>
 
-                        <form method="POST" action="{% url 'song_albums' song.id %}">
-                            {% csrf_token %}
-                            <div class="row g-3 align-items-center">
-                                <div class="col-md-8">
-                                    <select class="form-select" name="album_id" required>
-                                        {% for album in albums %}
-                                            <option value="{{ album.id }}">{{ album.name }}</option>
-                                        {% empty %}
-                                            <option disabled>No albums available</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                    <form method="POST" action="{% url 'song_albums' song.id %}">
+                        {% csrf_token %}
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-8">
+                                <select class="form-select" name="album_id" required>
 
-                                <div class="col-md-4 text-end">
-                                    <button type="submit" class="btn btn-success w-100">Add to Album</button>
-                                </div>
+                                    {% for album in albums %}
+                                    <option value="{{ album.id }}">{{ album.name }}</option>
+                                    {% empty %}
+                                    <option disabled>No albums available</option>
+                                    {% endfor %}
+
+                                </select>
                             </div>
-                        </form>
-                    </div>
+
+                            <div class="col-md-4 text-end">
+                                <button type="submit" class="btn btn-success w-100">Add to Album</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
+            </div>
             {% endif %}
-            
+
             {% include 'partials/message.html' %}
         </div>
     </div>
 </div>
+
 {% endblock %}

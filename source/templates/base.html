@@ -15,10 +15,10 @@
     <link rel="icon" href="{% static 'images/logo-IT.png' %}" type="image/png">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'spotify/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'app/css/style.css' %}">
 
     <!-- JS -->
-    <link rel="stylesheet" href="{% static 'spotify/js/main.js' %}">
+    <link rel="stylesheet" href="{% static 'app/js/main.js' %}">
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -33,15 +33,18 @@
 </head>
 
 <body>
+
     {% include 'partials/header.html' %}
 
+    {% include 'partials/navbar.html' %}
+    
     {% block content %}{% endblock %}
 
     {% include 'partials/footer.html' %}
 
 
     <script>
-        // Button Favorite Song
+        // Button Favorite
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".btn-favorite").forEach(button => {
                 button.addEventListener("click", function () {
@@ -56,16 +59,16 @@
                     })
                         .then(response => {
                             if (response.redirected) {
-                                window.location.href = response.url; // Redirect to login page
+                                window.location.href = response.url; // Redirect to Login
                                 return;
                             }
                             return response.json();
                         })
                         .then(data => {
                             if (data.is_favorite) {
-                                this.innerHTML = "❤️ Liked";  // Đã thích
+                                this.innerHTML = "❤️ Liked";
                             } else {
-                                this.innerHTML = "🤍 Like";  // Bỏ thích
+                                this.innerHTML = "🤍 Like";
                             }
                         })
                         .catch(error => console.error("Error:", error));

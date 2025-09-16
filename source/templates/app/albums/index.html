@@ -2,20 +2,21 @@
 
 {% load static %}
 
-{% block title %}Albums{% endblock %}
+{% block title %}Albums- {{ user.username }}{% endblock %}
 
 {% block content %}
+
 <div class="container py-5 my-4">
     <div class="mb-1 d-flex gap-5">
         <h2 class="fw-bold">My Albums 🎧</h2>
-        <a href="{% url 'create_album' %}" class="btn btn-outline-success">➕ Create New Album</a>
+        <a href="{% url 'album_create' %}" class="btn btn-outline-success">➕ Create New Album</a>
     </div>
 
     <p>Created by <strong>{{ user.username }}</strong></p>
 
     {% if albums %}
-
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 my-4">
+
         {% for album in albums %}
         <div class="col">
             <div class="card h-100 shadow-sm border-0 bg-success bg-gradient">
@@ -25,15 +26,15 @@
                 </div>
 
                 <div class="card-footer bg-transparent border-0 text-end">
-                    <a href="{% url 'album_detail' album.id %}" class="btn btn-dark btn-sm">View Details</a>
-                    <a href="{% url 'delete_album' album.id %}" class="btn btn-danger btn-sm"
+                    <a href="{% url 'album_detail' album.id %}" class="btn btn-dark btn-sm">View</a>
+                    <a href="{% url 'album_delete' album.id %}" class="btn btn-danger btn-sm"
                         onclick="return confirm('Are you sure to delete this album?')">🗑️ Delete</a>
                 </div>
             </div>
         </div>
         {% endfor %}
-    </div>
 
+    </div>
     {% else %}
     <div class="alert alert-warning text-center" role="alert">
         🎵 You haven't created any albums yet.
@@ -42,4 +43,5 @@
 
     {% include 'partials/message.html' %}
 </div>
+
 {% endblock %}

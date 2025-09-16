@@ -21,31 +21,36 @@
             <!-- Centered Navigation links -->
             <ul class="navbar-nav mb-2 mb-lg-0">
                 <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/' %}text-light bg-dark rounded px-3{% endif %}" href="/">Home</a>
+                    <a class="nav-link fs-6 {% if request.path == '/' %}text-light bg-dark rounded px-3{% endif %}"
+                        href="/">Home</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/profile/' %}text-light bg-dark rounded px-3{% endif %}" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-link fs-6 {% if request.path == '/user/profile/' %}text-light bg-dark rounded px-3{% endif %}"
+                        href="{% url 'profile' %}">Profile</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/song/favorites/' %}text-light bg-dark rounded px-3{% endif %}" href="{% url 'favorites' %}">Favorites</a>
+                    <a class="nav-link fs-6 {% if request.path == '/user/favorite/' %}text-light bg-dark rounded px-3{% endif %}"
+                        href="{% url 'favorite' %}">Favorite</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/album/' %}text-light bg-dark rounded px-3{% endif %}" href="{% url 'albums' %}">Albums</a>
+                    <a class="nav-link fs-6 {% if request.path == '/user/albums/' %}text-light bg-dark rounded px-3{% endif %}"
+                        href="{% url 'albums' %}">Albums</a>
                 </li>
             </ul>
         </div>
 
-        <!-- Auth buttons on the right -->
         <div class="d-flex align-items-center">
+
             {% if user.is_authenticated %}
-                <span class="navbar-text me-3 text-white">
-                    👋 Hi, <strong>{{ user.username }}</strong>
-                </span>
-                <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
+            <span class="navbar-text me-3 text-white">
+                👋 Hi ! <strong>{{ user.username }}</strong>
+            </span>
+            <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-light me-2">Login</a>
-                <a href="{% url 'register' %}" class="btn btn-outline-light">Sign Up</a>
+            <a href="{% url 'login' %}" class="btn btn-light me-2">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-light">Register</a>
             {% endif %}
+
         </div>
 
     </div>

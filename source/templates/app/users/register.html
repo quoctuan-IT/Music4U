@@ -1,10 +1,11 @@
-{% extends "base_login.html" %}
+{% extends "base_auth.html" %}
 
 {% load static %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Register{% endblock %}
 
 {% block content %}
+
 <main class="form-signin w-100 m-auto">
 
   {% include 'partials/message.html' %}
@@ -62,4 +63,5 @@
   </form>
 
 </main>
+
 {% endblock %}

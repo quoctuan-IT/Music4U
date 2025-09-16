@@ -2,11 +2,10 @@
 
 {% load static %}
 
-{% block title %}
-Profile - {{ user.username }}
-{% endblock %}
+{% block title %}Profile - {{ user.username }}{% endblock %}
 
 {% block content %}
+
 <div class="container py-5">
     <div class="p-4 row justify-content-md-center">
         <div class="col-md-5">
@@ -31,7 +30,7 @@ Profile - {{ user.username }}
             </dl>
             <hr>
             <div class="d-flex justify-content-start gap-3">
-                <a href="{% url 'favorites' %}" class="btn btn-success">🎵 My Favorite Songs</a>
+                <a href="{% url 'favorite' %}" class="btn btn-success">🎵 My Favorite Songs</a>
                 <a href="{% url 'albums' %}" class="btn btn-success">💿 My Albums</a>
 
                 {% if user.is_staff %}
@@ -41,4 +40,5 @@ Profile - {{ user.username }}
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -76,7 +76,7 @@ def favorite_songs(request):
     favorite_songs = request.user.favorite_songs.all()
 
     return render(
-        request, "app/songs/favorites.html", {"favorite_songs": favorite_songs}
+        request, "app/users/favorite.html", {"favorite_songs": favorite_songs}
     )
 
 
@@ -131,7 +131,7 @@ def song_to_album(request, song_id):
 def albums(request):
     albums = Album.objects.filter(user=request.user)
 
-    return render(request, "app/albums/albums.html", {"albums": albums})
+    return render(request, "app/albums/index.html", {"albums": albums})
 
 
 @login_required
@@ -202,9 +202,12 @@ def search(request):
     artists = Artist.objects.all()
 
     context = {
+        # Data
         "songs": songs,
         "genres": genres,
         "artists": artists,
+        
+        # User input
         "query": query,
         "selected_genre": genre_id,
         "selected_artist": artist_id,
