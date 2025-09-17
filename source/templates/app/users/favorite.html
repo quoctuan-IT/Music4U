@@ -16,7 +16,7 @@
     {% if favorite_songs %}
 
     <!-- Now Playing Section -->
-    {% include 'partials/playing_section.html' %}
+    {% include 'partials/music_player.html' %}
 
     <!-- Song List -->
     <div class="card shadow-sm">
@@ -25,12 +25,13 @@
         </div>
 
         <ul class="list-group list-group-flush" id="songList">
+
             {% for song in favorite_songs %}
             <li class="list-group-item d-flex justify-content-between align-items-center song-item"
                 data-index="{{ forloop.counter0 }}">
                 <div class="d-flex align-items-center gap-3">
                     <!-- <span class="fs-5">🎵</span> -->
-                    <img src="{{ song.cover_image.url }}" height="50" width="50">
+                    <!-- <img src="{{ song.cover_image.url }}" height="50" width="50"> -->
 
                     <div>
                         <div class="fw-bold">{{ song.title }}</div>
@@ -39,16 +40,19 @@
                 </div>
 
                 <button class="btn btn-outline-danger btn-sm btn-favorite" data-song-id="{{ song.id }}">
+
                     {% if song in user.favorite_songs.all %}
                     ❤️ Liked
                     {% else %}
                     🤍 Like
                     {% endif %}
+
                 </button>
             </li>
             {% empty %}
             <li class="list-group-item text-center">No favorite songs found.</li>
             {% endfor %}
+
         </ul>
     </div>
 

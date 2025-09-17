@@ -5,5 +5,4 @@ from .models import Genre, Artist
 def global_data(request):
     return {
         "genres": Genre.objects.all(),
-        "artists": Artist.objects.all(),
     }

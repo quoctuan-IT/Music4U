@@ -55,7 +55,7 @@
                 <div class="card-body">
                     <h5 class="card-title">➕ Add to Album</h5>
 
-                    <form method="POST" action="{% url 'song_albums' song.id %}">
+                    <form method="POST" action="{% url 'song_to_album' song.id %}">
                         {% csrf_token %}
                         <div class="row g-3 align-items-center">
                             <div class="col-md-8">

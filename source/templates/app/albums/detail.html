@@ -17,7 +17,7 @@
     {% if album.songs.all %}
 
     <!-- Now Playing Section -->
-    {% include 'partials/playing_section.html' %}
+    {% include 'partials/music_player.html' %}
 
     <!-- Song List -->
     <div class="card shadow-sm">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <a class="btn btn-outline-danger btn-sm" href="{% url 'remove_song_album' album.id song.id %}"
+                <a class="btn btn-outline-danger btn-sm" href="{% url 'album_remove_song' album.id song.id %}"
                     onclick="return confirm('Are you sure to remove this song?')">
                     🗑️ Delete
                 </a>

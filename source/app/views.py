@@ -11,12 +11,9 @@ from .models import Song, Album, Genre, Artist
 
 def index(request):
     songs = Song.objects.all().order_by("-id")[:4]  # Display newest Songs
-    genres = Genre.objects.all()
     artists = Artist.objects.all()
 
-    return render(
-        request, "index.html", {"songs": songs, "genres": genres, "artists": artists}
-    )
+    return render(request, "index.html", {"songs": songs, "artists": artists})
 
 
 # User
@@ -198,15 +195,12 @@ def search(request):
     if artist_id:
         songs = songs.filter(artist__id=artist_id)
 
-    genres = Genre.objects.all()
     artists = Artist.objects.all()
 
     context = {
         # Data
         "songs": songs,
-        "genres": genres,
         "artists": artists,
-        
         # User input
         "query": query,
         "selected_genre": genre_id,
