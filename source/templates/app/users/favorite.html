@@ -2,16 +2,22 @@
 
 {% load static %}
 
-{% block title %}Favorites Songs❤️{% endblock %}
+{% block title %}Favorite Songs ❤️{% endblock %}
 
 {% block content %}
-<div class="container py-5 my-4">
-    <div class="mb-1 d-flex gap-5">
-        <h2 class="fw-bold">My Favorite Songs ❤️🎵</h2>
-        <button class="btn btn-outline-primary" onclick="playAllSongs()">▶️ Play All</button>
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h3 class="fw-bold text-danger mb-1">❤️ My Favorite Songs</h3>
+            <p class="text-muted mb-0">Saved by <strong>{{ user.username }}</strong></p>
+        </div>
+        {% if favorite_songs %}
+        <button class="btn btn-primary" onclick="playAllSongs()">
+            <i class="fas fa-play me-2"></i>Play All
+        </button>
+        {% endif %}
     </div>
-
-    <p>Saved by <strong>{{ user.username }}</strong></p>
 
     {% if favorite_songs %}
 
@@ -19,51 +25,87 @@
     {% include 'partials/music_player.html' %}
 
     <!-- Song List -->
-    <div class="card shadow-sm">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0">🎧 My Favorite Songs</h5>
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-headphones me-2"></i>My Favorite Songs
+            </h5>
+            <span class="badge bg-light text-success">{{ favorite_songs|length }} songs</span>
         </div>
 
-        <ul class="list-group list-group-flush" id="songList">
-
+        <div class="list-group list-group-flush" id="songList">
             {% for song in favorite_songs %}
-            <li class="list-group-item d-flex justify-content-between align-items-center song-item"
-                data-index="{{ forloop.counter0 }}">
-                <div class="d-flex align-items-center gap-3">
-                    <!-- <span class="fs-5">🎵</span> -->
-                    <!-- <img src="{{ song.cover_image.url }}" height="50" width="50"> -->
+            <div class="list-group-item song-item border-0" data-index="{{ forloop.counter0 }}">
+                <div class="row align-items-center g-3">
+                    <!-- Song Number -->
+                    <div class="col-auto d-none d-md-block">
+                        <span class="text-muted fw-bold">{{ forloop.counter }}</span>
+                    </div>
 
-                    <div>
-                        <div class="fw-bold">{{ song.title }}</div>
+                    <!-- Cover Image -->
+                    <div class="col-auto">
+                        <img src="{{ song.cover_image.url }}" alt="{{ song.title }}" class="rounded" width="60"
+                            height="60">
+                    </div>
+
+                    <!-- Song Info -->
+                    <div class="col">
+                        <div class="fw-semibold">{{ song.title }}</div>
                         <small class="text-muted">{{ song.artist }}</small>
+                        {% if song.genre %}
+                        <div class="mt-1">
+                            <span class="badge bg-secondary">{{ song.genre }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Duration (if available) -->
+                    <div class="col-auto d-none d-lg-block">
+                        <small class="text-muted">
+                            {% if song.duration %}{{ song.duration }}{% else %}--:--{% endif %}
+                        </small>
+                    </div>
+
+                    <!-- Favorite Button -->
+                    <div class="col-auto">
+                        <button class="btn btn-outline-danger btn-sm btn-favorite" data-song-id="{{ song.id }}">
+                            {% if song in user.favorite_songs.all %}
+                            <i class="fas fa-heart me-1"></i>Liked
+                            {% else %}
+                            <i class="far fa-heart me-1"></i>Like
+                            {% endif %}
+                        </button>
                     </div>
                 </div>
-
-                <button class="btn btn-outline-danger btn-sm btn-favorite" data-song-id="{{ song.id }}">
-
-                    {% if song in user.favorite_songs.all %}
-                    ❤️ Liked
-                    {% else %}
-                    🤍 Like
-                    {% endif %}
-
-                </button>
-            </li>
+            </div>
             {% empty %}
-            <li class="list-group-item text-center">No favorite songs found.</li>
+            <div class="list-group-item text-center py-4">
+                <i class="fas fa-music fa-2x text-muted mb-3"></i>
+                <p class="text-muted mb-0">No favorite songs found.</p>
+            </div>
             {% endfor %}
-
-        </ul>
+        </div>
     </div>
 
     {% else %}
-    <div class="alert alert-warning text-center" role="alert">
-        🎵 You don't have any favorite songs yet.
+    <!-- Empty State -->
+    <div class="text-center py-5">
+        <div class="mb-4">
+            <i class="fas fa-heart-broken fa-4x text-muted"></i>
+        </div>
+        <h4 class="text-muted mb-3">No Favorite Songs Yet</h4>
+        <p class="text-muted mb-4">Start adding songs to your favorites to build your personal playlist!</p>
+        <a href="{% url 'index' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-search me-2"></i>Discover Music
+        </a>
     </div>
     {% endif %}
+
+    <!-- Messages -->
+    {% include 'partials/message.html' %}
 </div>
 
-
+<!-- Keep your original JavaScript -->
 <script>
     const songs = [
         {% for song in favorite_songs %}
@@ -124,5 +166,25 @@
     // Auto play next song
     player.onended = playNextSong;
 </script>
+
+<style>
+    /* Minimal custom CSS for hover effect */
+    .song-item:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        transition: background-color 0.2s ease;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .d-flex.justify-content-between {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
 
 {% endblock %}

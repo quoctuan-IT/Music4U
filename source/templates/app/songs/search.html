@@ -6,8 +6,12 @@
 
 {% block content %}
 
-<div class="container py-5">
-    <h2 class="mb-4">🔍 Search: {{ query }}</h2>
+<div class="container">
+    <h3 class="mb-4">🔍 Search Results:
+        {% if query %} "{{ query }}"{% endif %}
+        {% if query and selected_genre %} -{% endif %}
+        {% if selected_genre %} "{{ selected_genre_name }}"{% endif %}
+    </h3>
 
     <!-- Results -->
     {% if songs %}

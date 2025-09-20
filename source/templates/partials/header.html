@@ -1,57 +1,148 @@
 {% load static %}
 
-<!-- Header -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm fixed-top">
-    <div class="container-fluid">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark shadow-sm fixed-top bg-dark">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center transition-base" href="/">
+      <div class="d-flex align-items-center justify-content-center rounded-circle bg-light bg-opacity-10 me-2"
+        style="width:40px;height:40px;">
+        <img src="{% static 'images/logo-IT.png' %}" alt="Logo" width="30" height="30" class="rounded-circle">
+      </div>
+      <span class="fw-bold fs-2 text-uppercase brand-text" style="color: pink;">QT-M4U</span>
+    </a>
 
-        <!-- Brand: Logo + Name -->
-        <a class="navbar-brand d-flex align-items-center" href="/">
-            <img src="{% static 'images/logo-IT.png' %}" alt="Logo" width="40" height="40" class="me-2">
-            <span class="fw-bold fst-italic fs-3 text-light text-uppercase">Spotify</span>
+    <!-- Toggle b utton -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+      aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar content -->
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <!-- Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 justify-content-center flex-grow-1">
+        <li class="nav-item mx-2">
+          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'index' %}active-link{% endif %}"
+            href="{% url 'index' %}">
+            Home
+          </a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'artist' %}active-link{% endif %}"
+            href="#">
+            Artist
+          </a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'song' %}active-link{% endif %}"
+            href="#">
+            Song
+          </a>
+        </li>
+      </ul>
+
+      <!-- User section -->
+      {% if user.is_authenticated %}
+      <div class="d-flex align-items-center flex-column flex-lg-row">
+        <span class="navbar-text me-lg-3 text-white mb-2 mb-lg-0 text-center">
+          Hi! <strong class="text-pink">{{ user.username }}</strong>
+        </span>
+
+        <div class="d-flex flex-column flex-lg-row gap-2">
+          <a class="btn btn-outline-light btn-sm px-3 transition-base" href="{% url 'profile' %}">
+            Profile
+          </a>
+          <a href="{% url 'logout' %}" class="btn btn-danger btn-sm px-3 transition-base">
+            Logout
+          </a>
+        </div>
+      </div>
+      {% else %}
+      <div class="d-flex flex-column flex-lg-row gap-2">
+        <a href="{% url 'login' %}" class="btn btn-outline-light px-4 transition-base">
+          Login
         </a>
-
-        <!-- Toggle button (for mobile view) -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Main navbar content -->
-        <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
-            <!-- Centered Navigation links -->
-            <ul class="navbar-nav mb-2 mb-lg-0">
-                <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/' %}text-light bg-dark rounded px-3{% endif %}"
-                        href="/">Home</a>
-                </li>
-                <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/user/profile/' %}text-light bg-dark rounded px-3{% endif %}"
-                        href="{% url 'profile' %}">Profile</a>
-                </li>
-                <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/user/favorite/' %}text-light bg-dark rounded px-3{% endif %}"
-                        href="{% url 'favorite' %}">Favorite</a>
-                </li>
-                <li class="nav-item mx-3">
-                    <a class="nav-link fs-6 {% if request.path == '/user/albums/' %}text-light bg-dark rounded px-3{% endif %}"
-                        href="{% url 'albums' %}">Albums</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="d-flex align-items-center">
-
-            {% if user.is_authenticated %}
-            <span class="navbar-text me-3 text-white">
-                👋 Hi ! <strong>{{ user.username }}</strong>
-            </span>
-            <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>
-            {% else %}
-            <a href="{% url 'login' %}" class="btn btn-light me-2">Login</a>
-            <a href="{% url 'register' %}" class="btn btn-outline-light">Register</a>
-            {% endif %}
-
-        </div>
+        <a href="{% url 'register' %}" class="btn btn-light px-4 text-dark transition-base">
+          Register
+        </a>
+      </div>
+      {% endif %}
 
     </div>
+  </div>
 </nav>
+
+<!-- Spacer for fixed navbar -->
+<div style="padding: 2rem;"></div>
+
+
+<style>
+  /* Nav links */
+  .nav-link:hover {
+    color: black !important;
+    background: pink;
+    transform: translateY(-2px);
+  }
+
+  .nav-link.active-link {
+    background: pink;
+    color: black;
+  }
+
+  /* Buttons */
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+
+  /* Responsive */
+  @media (max-width: 991.98px) {
+    .navbar-collapse {
+      padding: 1rem 0;
+    }
+
+    .navbar-nav {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .nav-item {
+      margin: 0.25rem 0;
+    }
+
+    .nav-link {
+      display: block;
+      margin: 0.25rem auto;
+      max-width: 200px;
+    }
+
+    .d-flex.align-items-center {
+      padding: 1rem 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn {
+      min-width: 120px;
+    }
+
+    .brand-text {
+      font-size: 1.5rem !important;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .brand-text {
+      font-size: 1.25rem !important;
+    }
+
+    .btn {
+      width: 100%;
+      min-width: unset;
+    }
+
+    .gap-2 {
+      gap: 0.75rem !important;
+    }
+  }
+</style>

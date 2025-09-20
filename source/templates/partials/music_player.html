@@ -1,14 +1,80 @@
-<div class="text-center my-4">
-    <h4 class="mb-2 text-success fw-bold">🎶🎶</h4>
-    <p id="nowPlaying" class="text-muted">No song playing</p>
+<!-- Music Player -->
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0 text-center">
+            <i class="bi bi-music-note-beamed me-2"></i>Now Playing
+        </h5>
+    </div>
 
-    <audio id="audioPlayer" controls class="w-50 mb-3">
-        <source src="" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <div class="card-body text-center p-4">
+        <!-- Song Info -->
+        <div class="mb-3">
+            <div class="mb-2">
+                <i class="bi bi-disc text-primary" style="font-size: 3rem;"></i>
+            </div>
+            <h6 id="nowPlaying" class="fw-semibold text-dark mb-1">No song playing</h6>
+            <small class="text-muted">Select a song from your playlist</small>
+        </div>
 
-    <div class="d-flex justify-content-center gap-3">
-        <button class="btn btn-outline-danger" onclick="togglePlay()">⏸</button>
-        <button class="btn btn-outline-secondary" onclick="playNextSong()">⏭</button>
+        <!-- Audio Player -->
+        <div class="mb-4">
+            <audio id="audioPlayer" controls class="w-100" style="max-width: 400px; height: 40px;">
+                <source src="" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-outline-secondary rounded-pill btn-sm" onclick="playPreviousSong()" title="Previous">
+                <i class="bi bi-skip-backward-fill"></i>
+            </button>
+
+            <button class="btn btn-primary rounded-pill px-3" onclick="togglePlay()" title="Play/Pause">
+                <i class="bi bi-play-fill me-1"></i><span class="d-none d-sm-inline">Play</span>
+            </button>
+
+            <button class="btn btn-outline-secondary rounded-pill btn-sm" onclick="playNextSong()" title="Next">
+                <i class="bi bi-skip-forward-fill"></i>
+            </button>
+
+            <button class="btn btn-outline-info rounded-pill btn-sm d-none d-md-inline-block" onclick="toggleShuffle()"
+                title="Shuffle">
+                <i class="bi bi-shuffle"></i>
+            </button>
+
+            <button class="btn btn-outline-warning rounded-pill btn-sm d-none d-md-inline-block"
+                onclick="toggleRepeat()" title="Repeat">
+                <i class="bi bi-arrow-repeat"></i>
+            </button>
+        </div>
+
+        <!-- Volume Control -->
+        <div class="mt-3">
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <i class="bi bi-volume-down text-muted"></i>
+                <input type="range" class="form-range" min="0" max="100" value="50" id="volumeSlider"
+                    style="width: 120px;">
+                <i class="bi bi-volume-up text-muted"></i>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    /* Music player responsive adjustments */
+    @media (max-width: 576px) {
+        .d-flex.gap-2 {
+            gap: 0.5rem !important;
+        }
+
+        .btn.rounded-pill {
+            padding: 0.375rem 0.75rem;
+        }
+
+        .btn-primary.px-4 {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+    }
+</style>

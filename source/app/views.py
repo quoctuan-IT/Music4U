@@ -181,19 +181,20 @@ def album_remove_song(request, album_id, song_id):
 def search(request):
     query = request.GET.get("query", "")
     genre_id = request.GET.get("genre", "")
-    artist_id = request.GET.get("artist", "")
 
     songs = Song.objects.all()
 
     if query:
         songs = songs.filter(title__icontains=query)
 
+    selected_genre_obj = None
     if genre_id:
         # Support ManyToMany genres
         songs = songs.filter(genres__id=genre_id)
-
-    if artist_id:
-        songs = songs.filter(artist__id=artist_id)
+        try:
+            selected_genre_obj = Genre.objects.get(id=genre_id)
+        except Genre.DoesNotExist:
+            selected_genre_obj = None
 
     artists = Artist.objects.all()
 
@@ -203,8 +204,8 @@ def search(request):
         "artists": artists,
         # User input
         "query": query,
-        "selected_genre": genre_id,
-        "selected_artist": artist_id,
+        "selected_genre": str(genre_id),
+        "selected_genre_name": selected_genre_obj.name if selected_genre_obj else "",
     }
 
     return render(request, "app/songs/search.html", context)
