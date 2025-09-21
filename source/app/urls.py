@@ -9,12 +9,13 @@ urlpatterns = [
     # Index
     path("", views.index, name="index"),
     # User
-    path("user/register/", views.register, name="register"),
-    path("user/login/", views.login_view, name="login"),
+    path("register/", views.register, name="register"),
+    path("login/", views.login_view, name="login"),
     path("user/logout/", views.logout_view, name="logout"),
-    path("user/profile/", views.profile, name="profile"),
+    path("user/", views.profile, name="profile"),
     path("user/favorite/", views.favorite_songs, name="favorite"),
     # Song
+    path("songs/", views.songs, name="songs"),
     path("song/<int:song_id>/detail/", views.song_detail, name="song_detail"),
     path(
         "song/<int:song_id>/favorite/", views.song_to_favorite, name="song_to_favorite"

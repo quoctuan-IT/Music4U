@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Favorite Songs ❤️{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h3 class="fw-bold text-danger mb-1">My Favorite Songs</h3>
+            <p class="mb-0">Saved by <strong>{{ user.username }}</strong></p>
+        </div>
+
+        {% if favorite_songs %}
+        <button class="btn btn-primary" onclick="playAllSongs()">▶️ Play All</button>
+        {% endif %}
+
+    </div>
+
+    {% if favorite_songs %}
+
+    <!-- Now Playing Section -->
+    {% include 'partials/music_player.html' %}
+
+    <!-- Song List -->
+    <div class="card shadow-sm border-0">
+        <div class="card-header text-black d-flex justify-content-between align-items-center"
+            style="background-color: pink;">
+            <h5 class="mb-0">
+                My Favorite Songs
+            </h5>
+        </div>
+
+        <div class="list-group list-group-flush" id="songList">
+            {% for song in favorite_songs %}
+            {% include 'partials/song_list.html' %}
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="text-center py-2">
+        <h4 class="mb-3">No Favorite Songs Yet</h4>
+        <p class="mb-4">Start adding songs to your favorites to build your personal playlist!</p>
+        <a href="{% url 'index' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-search me-2"></i>Discover Music
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+
+<script>
+    const songs = [
+        {% for song in favorite_songs %}
+    {
+        title: "{{ song.title|escapejs }}",
+            artist: "{{ song.artist|escapejs }}",
+                url: "{{ song.audio_file.url }}"
+    },
+    {% endfor %}
+    ];
+
+    let currentIndex = 0;
+    const player = document.getElementById("audioPlayer");
+    const nowPlaying = document.getElementById("nowPlaying");
+    const songList = document.querySelectorAll(".song-item");
+
+    function highlightCurrentSong() {
+        songList.forEach(item => item.classList.remove("bg-success", "text-white"));
+        if (songList[currentIndex]) {
+            songList[currentIndex].classList.add("bg-success", "text-white");
+        }
+    }
+
+    function playAllSongs() {
+        if (songs.length === 0) return;
+
+        currentIndex = 0;
+        player.src = songs[currentIndex].url;
+        player.play();
+        updateNowPlaying();
+        highlightCurrentSong();
+    }
+
+    function playNextSong() {
+        currentIndex++;
+        if (currentIndex < songs.length) {
+            player.src = songs[currentIndex].url;
+            player.play();
+            updateNowPlaying();
+            highlightCurrentSong();
+        } else {
+            nowPlaying.innerText = "All songs played.";
+        }
+    }
+
+    function togglePlay() {
+        if (player.paused) {
+            player.play();
+        } else {
+            player.pause();
+        }
+    }
+
+    function updateNowPlaying() {
+        nowPlaying.innerText = `🎧 ${songs[currentIndex].title} - ${songs[currentIndex].artist}`;
+    }
+
+    // Auto play next song
+    player.onended = playNextSong;
+</script>
+
+
+{% endblock %}

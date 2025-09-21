@@ -6,12 +6,12 @@
 
 {% block content %}
 
-<div class="container py-4">
+<div class="container py-2">
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold text-white mb-1">🎧 My Albums</h2>
-            <p class="text-muted mb-0">Created by <strong>{{ user.username }}</strong></p>
+            <h2 class="fw-bold text-white mb-1">My Albums</h2>
+            <p class="mb-0">Created by <strong>{{ user.username }}</strong></p>
         </div>
         <a href="{% url 'album_create' %}" class="btn btn-success">
             <i class=" me-2"></i>Create
@@ -41,11 +41,11 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
-                            <div class="text-muted small">Songs</div>
+                            <div class="small">Songs</div>
                             <div class="fs-4 fw-bold text-primary">{{ album.songs.count }}</div>
                         </div>
                         <div class="col-6">
-                            <div class="text-muted small">Created</div>
+                            <div class="small">Created</div>
                             <div class="small">{{ album.created_at|date:"M d" }}</div>
                         </div>
                     </div>
@@ -75,17 +75,14 @@
 
     {% else %}
     <!-- Empty State -->
-    <div class="text-center py-5">
-        <div class="mb-4">
-            <i class="text-muted"></i>
-        </div>
-        <h4 class="text-muted mb-3">No Albums Yet</h4>
-        <p class="text-muted mb-4">You haven't created any albums yet. Start building your music collection!</p>
+    <div class="text-center py-2">
+        <h4 class="mb-3">No Albums Yet</h4>
+        <p class="mb-4">You haven't created any albums yet. Start building your music collection!</p>
+        <a href="{% url 'index' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-search me-2"></i>Discover Music
+        </a>
     </div>
     {% endif %}
-
-    <!-- Messages -->
-    {% include 'partials/message.html' %}
 </div>
 
 <style>

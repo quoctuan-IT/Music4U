@@ -1,32 +1,54 @@
 {% load static %}
 
+<!-- Song Card -->
 <div class="col">
-    <div class="card h-100 shadow-sm border-0">
-        <a href="{% url 'song_detail' song.id %}">
+    <div class="card h-100 shadow-sm border-0 song-card">
+        <!-- Cover Image -->
+        <div class="position-relative overflow-hidden">
+            <a href="{% url 'song_detail' song.id %}">
+                {% if song.cover_image %}
+                <img src="{{ song.cover_image.url }}" class="card-img-top" alt="{{ song.title }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="{% static 'images/logo-IT.png' %}" class="card-img-top" alt="Default cover"
+                    style="height: 200px; object-fit: cover;">
+                {% endif %}
+            </a>
 
-            {% if song.cover_image %}
-            <img src="{{ song.cover_image.url }}" class="card-img-top" alt="{{ song.title }}" height="180">
-            {% else %}
-            <img src="{% static 'images/logo-IT.png' %}" class="card-img-top" alt="" height="180">
-            {% endif %}
-
-        </a>
-
-        <div class="card-body text-center">
-            <h5 class="card-title">{{ song.title }}</h5>
-            <p class="card-text text-light">{{ song.artist }}</p>
+            <!-- Play Button Overlay -->
+            <div class="position-absolute top-50 start-50 translate-middle play-overlay d-none">
+                <a class="btn btn-primary rounded-circle btn-lg" href="{% url 'song_detail' song.id %}">
+                    <i class="bi bi-play-fill"></i>
+                </a>
+            </div>
         </div>
 
-        <div class="card-footer text-center border-0 bg-transparent">
-            <button class="btn btn-outline-light btn-sm btn-favorite" data-song-id="{{ song.id }}">
+        <!-- Card Body -->
+        <div class="card-body d-flex flex-column">
+            <h6 class="card-title text-truncate mb-2" title="{{ song.title }}">
+                {{ song.title }}
+            </h6>
+            <p class="card-text text-muted small text-truncate mb-2" title="{{ song.artist }}">
+                <i class="bi bi-person me-1"></i>{{ song.artist }}
+            </p>
+        </div>
 
-                {% if song in user.favorite_songs.all %}
-                ❤️ Liked
-                {% else %}
-                🤍 Like
+        <!-- Card Footer -->
+        <div class="card-footer bg-transparent border-0 pt-0">
+            <div class="d-flex gap-1">
+                <a class="btn btn-outline-primary btn-sm flex-fill" title="Play" href="{% url 'song_detail' song.id %}">
+                    <i class="bi bi-play-circle"></i>
+                </a>
+
+                {% if user.is_authenticated %}
+                <button class="btn btn-outline-danger btn-sm flex-fill btn-favorite" data-song-id="{{ song.id }}"
+                    title="Add to Favorites">
+                    <i class="bi bi-heart"></i>
+                </button>
                 {% endif %}
 
-            </button>
+            </div>
         </div>
+
     </div>
 </div>

@@ -4,16 +4,16 @@
         <form method="get" action="{% url 'search' %}" class="row g-3 align-items-end justify-content-center">
             <!-- Search Input -->
             <div class="col-lg-4 col-md-5 col-12">
-                <label for="searchInput" class="form-label fw-semibold">🔍 Search</label>
+                <label for="searchInput" class="form-label fw-semibold">Search</label>
                 <input type="text" class="form-control" id="searchInput" name="query"
                     placeholder="Enter Song title or Artist" value="{{ query }}">
             </div>
 
             <!-- Genre Filter -->
             <div class="col-lg-3 col-md-4 col-12">
-                <label for="genreSelect" class="form-label fw-semibold">🎼 Filter by Genre</label>
+                <label for="genreSelect" class="form-label fw-semibold">Filter by Genre</label>
                 <select class="form-select" id="genreSelect" name="genre">
-                    <option value="">All genres</option>
+                    <option value="">All Genres</option>
 
                     {% for genre in genres %}
                     <option value="{{ genre.id }}" {% if genre.id|stringformat:"s" == selected_genre %}selected{% endif %}>
@@ -26,8 +26,8 @@
 
             <!-- Search Button -->
             <div class="col-lg-2 col-md-3 col-6 d-grid">
-                <button type="submit" class="btn" style="background-color: pink; color: black;">
-                    🔍 <span class="d-none d-sm-inline">Search</span>
+                <button type="submit" class="btn text-black" style="background-color: pink;">
+                    Search
                 </button>
             </div>
         </form>

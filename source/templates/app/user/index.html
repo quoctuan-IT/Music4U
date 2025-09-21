@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Profile - {{ user.username }}{% endblock %}
+
+{% block content %}
+
+<div class="container py-2">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-10">
+
+            <!-- Profile Header -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header text-black text-center py-2" style="background-color: pink;">
+                    <h2 class="fw-bold mb-1">{{ user.first_name|default:user.username }}</h2>
+                    <p class="mb-0 opacity-75">@{{ user.username }}</p>
+                </div>
+
+                <!-- Profile Info -->
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <small class="text-muted">Name</small>
+                                    <div class="fw-semibold">{{ user.first_name}} {{ user.last_name|default:"Unknow" }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <small class="text-muted">Member Since</small>
+                                    <div class="fw-semibold">{{ user.date_joined|date:"F j, Y" }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card shadow-sm border-0 mb-4" style="background-color: black;">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a href="{% url 'favorite' %}" class="btn btn-outline-danger w-100 py-3">
+                                <i class="fas fa-heart fa-2x mb-2 d-block"></i>
+                                <div class="fw-semibold">Favorite Songs</div>
+                            </a>
+                        </div>
+            
+                        <div class="col-md-4">
+                            <a href="{% url 'albums' %}" class="btn btn-outline-primary w-100 py-3">
+                                <i class="fas fa-compact-disc fa-2x mb-2 d-block"></i>
+                                <div class="fw-semibold">Albums</div>
+                            </a>
+                        </div>
+            
+                        {% if user.is_staff %}
+                        <div class="col-md-4">
+                            <a href="/admin" class="btn btn-outline-warning w-100 py-3">
+                                <i class="fas fa-cog fa-2x mb-2 d-block"></i>
+                                <div class="fw-semibold">Admin</div>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Hover effects for action buttons */
+    .btn-outline-danger:hover,
+    .btn-outline-primary:hover,
+    .btn-outline-success:hover,
+    .btn-outline-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+    }
+
+    /* Profile card hover effect */
+    .card:hover {
+        transform: translateY(-2px);
+        transition: all 0.3s ease;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .border-end {
+            border-right: none !important;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .border-end:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+    }
+</style>
+
+{% endblock %}

@@ -28,15 +28,17 @@
             Home
           </a>
         </li>
+
         <li class="nav-item mx-2">
           <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'artist' %}active-link{% endif %}"
             href="#">
             Artist
           </a>
         </li>
+        
         <li class="nav-item mx-2">
-          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'song' %}active-link{% endif %}"
-            href="#">
+          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'songs' %}active-link{% endif %}"
+            href="{% url 'songs' %}">
             Song
           </a>
         </li>
