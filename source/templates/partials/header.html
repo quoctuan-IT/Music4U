@@ -30,8 +30,8 @@
         </li>
 
         <li class="nav-item mx-2">
-          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'artist' %}active-link{% endif %}"
-            href="#">
+          <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'artists' %}active-link{% endif %}"
+            href="{% url 'artists' %}">
             Artist
           </a>
         </li>

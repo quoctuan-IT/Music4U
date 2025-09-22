@@ -1,55 +1,60 @@
 {% extends "base.html" %}
+
 {% load static %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Artists{% endblock %}
 
 {% block content %}
 
 <div class="container py-1">
     <div class="mb-4">
-        <p class="display-6 fw-bold">All Songs</p>
+        <p class="display-6 fw-bold">All Artists</p>
     </div>
 
     <!-- Song Grid Container -->
-    {% if songs %}
+    {% if artists %}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
-        {% for song in songs %}
-        {% include 'partials/song_card.html' %}
+
+        {% for artist in artists %}
+        {% include 'partials/artist_card.html' %}
         {% endfor %}
+
     </div>
     {% else %}
+
     <!-- Empty State -->
     <div class="text-center py-5">
         <div class="mb-4">
             <i class="bi bi-music-note-list" style="font-size: 4rem; color: #6c757d;"></i>
         </div>
-        <h4 class="text-muted mb-3">No Songs Found</h4>
+        <h4 class="text-muted mb-3">No Artists Found</h4>
         <p class="text-muted mb-4">Try adjusting your search criteria or browse our music collection.</p>
         <a href="{% url 'index' %}" class="btn btn-primary">
             <i class="bi bi-arrow-left me-2"></i>Back to Home
         </a>
     </div>
     {% endif %}
+
 </div>
 
 
 <style>
-    /* Song Card Hover Effects */
-    .song-card {
+    /* Artist Card Hover Effects */
+    .artist-card {
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         cursor: pointer;
     }
 
-    .song-card:hover {
+    .artist-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     }
 
-    .song-card:hover .play-overlay {
+    .artist-card:hover .play-overlay {
         display: block !important;
     }
 
-    .song-card:hover .card-img-top {
+    .artist-card:hover .card-img-top {
         filter: brightness(0.8);
         transition: filter 0.3s ease;
     }
@@ -67,6 +72,12 @@
 
         .card-text {
             font-size: 0.85rem;
+        }
+
+        .artist-card {
+            width: 250px;
+            margin-left: auto;
+            margin-right: auto;
         }
     }
 

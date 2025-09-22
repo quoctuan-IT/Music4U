@@ -16,9 +16,11 @@
             <h3 class="fw-bold text-danger mb-1">Album: {{ album.name }}</h3>
             <p class="text-muted mb-0">Saved by <strong>{{ user.username }}</strong></p>
         </div>
-        {% if song in album.songs.all %}
+
+        {% if album.songs.all %}
         <button class="btn btn-primary" onclick="playAllSongs()">▶️ Play All</button>
         {% endif %}
+
     </div>
 
     {% if album.songs.all %}
@@ -36,12 +38,13 @@
         </div>
 
         <div class="list-group list-group-flush" id="songList">
+
             {% for song in album.songs.all %}
             {% include 'partials/song_list.html' %}
             {% endfor %}
+
         </div>
     </div>
-
     {% else %}
     <!-- Empty State -->
     <div class="text-center py-2">
@@ -52,6 +55,7 @@
         </a>
     </div>
     {% endif %}
+
 </div>
 
 

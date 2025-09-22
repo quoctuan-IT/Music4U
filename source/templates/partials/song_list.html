@@ -1,27 +1,23 @@
 <div class="list-group-item song-item border-0" data-index="{{ forloop.counter0 }}">
     <div class="row align-items-center g-3">
+
         <!-- Song Number -->
         <div class="col-auto d-none d-md-block">
             <span class="fw-bold">{{ forloop.counter }}</span>
         </div>
 
         <!-- Cover Image -->
-        <div class="col-auto">
+        <a class="col-auto" href="{% url 'song_detail' song.id %}">
             <img src="{{ song.cover_image.url }}" alt="{{ song.title }}" class="rounded" width="60" height="60">
-        </div>
+        </a>
 
         <!-- Song Info -->
-        <div class="col">
+        <a class="col" href="{% url 'song_detail' song.id %}">
             <div class="fw-semibold">{{ song.title }}</div>
             <small>{{ song.artist }}</small>
-            {% if song.genre %}
-            <div class="mt-1">
-                <span class="badge bg-secondary">{{ song.genre }}</span>
-            </div>
-            {% endif %}
-        </div>
+        </a>
 
-        {% if favorite_songs %}
+        {% if favorite_songs or songs %}
         <!-- Favorite Button -->
         <div class="col-auto">
             <button class="btn btn-outline-danger btn-sm btn-favorite" data-song-id="{{ song.id }}">
@@ -42,6 +38,11 @@
 
 
 <style>
+    a {
+        text-decoration: none;
+        color: pink;
+    }
+
     /* Minimal custom CSS for hover effect */
     .song-item:hover {
         background-color: pink;

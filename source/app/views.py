@@ -192,6 +192,20 @@ def album_remove_song(request, album_id, song_id):
     return redirect("album_detail", album_id=album.id)
 
 
+# Artist
+def artists(request):
+    artists = Artist.objects.all().order_by("-id")[:4]
+
+    return render(request, "app/artist/index.html", {"artists": artists})
+
+
+def artist_detail(request, artist_id):
+    artist = get_object_or_404(Artist, id=artist_id)
+    songs = Song.objects.filter(artist=artist).order_by("-id")
+
+    return render(request, "app/artist/detail.html", {"artist": artist, "songs": songs})
+
+
 # Search
 def search(request):
     query = request.GET.get("query", "")

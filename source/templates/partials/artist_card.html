@@ -1,0 +1,35 @@
+{% load static %}
+
+<!-- Artist Card -->
+<div class="col">
+    <div class="card h-100 shadow-sm border-0 artist-card">
+        <!-- Artist Image -->
+        <div class="position-relative overflow-hidden">
+            <a href="{% url 'artist_detail' artist.id %}">
+
+                {% if artist.image %}
+                <img src="{{ artist.image.url }}" class="card-img-top" alt="{{ artist.name }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="{% static 'images/logo-IT.png' %}" class="card-img-top" alt="Default artist"
+                    style="height: 200px; object-fit: cover;">
+                {% endif %}
+
+            </a>
+
+            <!-- View Button Overlay -->
+            <div class="position-absolute top-50 start-50 translate-middle play-overlay d-none">
+                <a class="btn btn-primary rounded-circle btn-lg" href="{% url 'artist_detail' artist.id %}">
+                    <i class="bi bi-person-fill"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body d-flex flex-column">
+            <h4 class="card-title text-truncate mb-2" title="{{ artist.name }}">
+                {{ artist.name }}
+            </h4>
+        </div>
+    </div>
+</div>

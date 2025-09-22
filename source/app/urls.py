@@ -31,6 +31,9 @@ urlpatterns = [
         views.album_remove_song,
         name="album_remove_song",
     ),
+    # Artists
+    path("artists/", views.artists, name="artists"),
+    path("artist/<int:artist_id>/detail/", views.artist_detail, name="artist_detail"),
     # Search
     path("search/", views.search, name="search"),
 ]
