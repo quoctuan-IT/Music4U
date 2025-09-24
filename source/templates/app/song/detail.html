@@ -36,9 +36,8 @@
 
                     <!-- Audio player -->
                     <div class="my-4">
-                        <audio controls class="w-100">
+                        <audio controls autoplay class="w-100">
                             <source src="{{ song.audio_file.url }}" type="audio/mpeg">
-                            Your browser does not support the audio element.
                         </audio>
                     </div>
 
@@ -58,10 +57,13 @@
             </div>
             {% endif %}
 
+            {% if user.is_authenticated %}
             <!-- Form add Song to Album -->
-            <div class="card bg-secondary mb-4">
+            <div class="card bg-dark mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Add Song to Album</h5>
+                    <h5 class="card-title">
+                        <i class="bi bi-folder-plus"></i> Add to Album
+                    </h5>
 
                     <form method="POST" action="{% url 'song_to_album' song.id %}">
                         {% csrf_token %}
@@ -79,13 +81,16 @@
                             </div>
 
                             <div class="col-md-4 text-end">
-                                <button type="submit" class="btn btn-success">Add</button>
+                                <button type="submit" class="btn btn-outline-success">
+                                    <i class="bi bi-folder-plus"></i> Add
+                                </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-
+            {% endif %}
+            
             {% include 'partials/message.html' %}
         </div>
     </div>

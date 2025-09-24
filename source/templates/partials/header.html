@@ -9,7 +9,7 @@
         style="width:40px;height:40px;">
         <img src="{% static 'images/logo-IT.png' %}" alt="Logo" width="30" height="30" class="rounded-circle">
       </div>
-      <span class="fw-bold fs-2 text-uppercase brand-text" style="color: pink;">QT-M4U</span>
+      <span class="fw-bold fs-2 text-uppercase brand-text" style="color: pink;">QT-M4U ❤️</span>
     </a>
 
     <!-- Toggle b utton -->
@@ -25,21 +25,21 @@
         <li class="nav-item mx-2">
           <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'index' %}active-link{% endif %}"
             href="{% url 'index' %}">
-            Home
+            <i class="bi bi-house-heart-fill"></i> Home
           </a>
         </li>
 
         <li class="nav-item mx-2">
           <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'artists' %}active-link{% endif %}"
             href="{% url 'artists' %}">
-            Artist
+            <i class="bi bi-person-heart"></i> Artist
           </a>
         </li>
         
         <li class="nav-item mx-2">
           <a class="btn nav-link px-3 py-2 transition-base {% if request.resolver_match.url_name == 'songs' %}active-link{% endif %}"
             href="{% url 'songs' %}">
-            Song
+            <i class="bi bi-music-note"></i> Song
           </a>
         </li>
       </ul>
@@ -53,10 +53,10 @@
 
         <div class="d-flex flex-column flex-lg-row gap-2">
           <a class="btn btn-outline-light btn-sm px-3 transition-base" href="{% url 'profile' %}">
-            Profile
+            <i class="bi bi-person-circle"></i> Profile
           </a>
           <a href="{% url 'logout' %}" class="btn btn-danger btn-sm px-3 transition-base">
-            Logout
+            <i class="bi bi-box-arrow-right"></i> Logout
           </a>
         </div>
       </div>

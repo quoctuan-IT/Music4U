@@ -42,18 +42,18 @@
     </div>
 
     {% if songs %}
-        <div class="mb-4 d-flex justify-content-center">
-            <button class="btn btn-primary" onclick="playAllSongs()">▶️ Play All</button>
-        </div>
+    <div class="mb-4 d-flex justify-content-center">
+        <button class="btn btn-outline-primary" onclick="playAllSongs()">▶️ PLAY All</button>
+    </div>
     <!-- Now Playing Section -->
     {% include 'partials/music_player.html' %}
 
     <!-- Song List -->
     <div class="card shadow-sm border-0">
-        <div class="card-header text-black d-flex justify-content-between align-items-center"
+        <div class="card-header text-black"
             style="background-color: pink;">
             <h5 class="mb-0">
-                Songs by {{ artist.name }}
+                <i class="bi bi-music-note-list"></i> {{ artist.name }}
             </h5>
         </div>
 
@@ -69,7 +69,7 @@
     <div class="text-center py-2">
         <h4 class="mb-3">No Songs found</h4>
         <p class="mb-4">This artist hasn't uploaded any songs yet!</p>
-        <a href="{% url 'index' %}" class="btn btn-primary btn-lg">
+        <a href="{% url 'index' %}" class="btn btn-outline-primary btn-lg">
             <i class="fas fa-search me-2"></i>Discover Music
         </a>
     </div>
@@ -95,9 +95,9 @@
     const songList = document.querySelectorAll(".song-item");
 
     function highlightCurrentSong() {
-        songList.forEach(item => item.classList.remove("bg-success", "text-white"));
+        songList.forEach(item => item.classList.remove("bg-black", "text-white"));
         if (songList[currentIndex]) {
-            songList[currentIndex].classList.add("bg-success", "text-white");
+            songList[currentIndex].classList.add("bg-black", "text-white");
         }
     }
 
@@ -121,6 +121,15 @@
         } else {
             nowPlaying.innerText = "All songs played.";
         }
+    }
+
+    function playPreviousSong() {
+        if (songs.length === 0) return;
+        currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+        player.src = songs[currentIndex].url;
+        player.play();
+        updateNowPlaying();
+        highlightCurrentSong();
     }
 
     function togglePlay() {

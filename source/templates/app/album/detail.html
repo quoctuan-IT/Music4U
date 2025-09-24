@@ -9,18 +9,26 @@
 <!-- Messages -->
 {% include 'partials/message.html' %}
 
-<div class="container py-4">
+<div class="container py-2">
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <div>
-            <h3 class="fw-bold text-danger mb-1">Album: {{ album.name }}</h3>
-            <p class="text-muted mb-0">Saved by <strong>{{ user.username }}</strong></p>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-music-note-beamed"></i> Album: {{ album.name }}
+            </h2>
+            <p class="mb-0">Saved by
+                <i class="bi bi-person-circle"></i>
+                <strong>{{ user.username }}</strong>
+            </p>
         </div>
 
-        {% if album.songs.all %}
-        <button class="btn btn-primary" onclick="playAllSongs()">▶️ Play All</button>
-        {% endif %}
+        <div class="col-lg-2 col-md-3 col-6">
 
+            {% if album.songs.all %}
+            <button class="btn btn-outline-primary" onclick="playAllSongs()">▶️ PLAY All</button>
+            {% endif %}
+
+        </div>
     </div>
 
     {% if album.songs.all %}
@@ -30,10 +38,9 @@
 
     <!-- Song List -->
     <div class="card shadow-sm border-0">
-        <div class="card-header text-black d-flex justify-content-between align-items-center"
-            style="background-color: pink;">
+        <div class="card-header text-black" style="background-color: pink;">
             <h5 class="mb-0">
-                My Favorite Songs
+                <i class="bi bi-music-note-list"></i> Songs
             </h5>
         </div>
 
@@ -50,8 +57,8 @@
     <div class="text-center py-2">
         <h4 class="mb-3">No Songs Yet</h4>
         <p class="mb-4">Start adding songs to your Album to build your personal playlist!</p>
-        <a href="{% url 'index' %}" class="btn btn-primary btn-lg">
-            <i class="fas fa-search me-2"></i>Discover Music
+        <a href="{% url 'index' %}" class="btn btn-outline-primary btn-lg">
+            <i class="bi bi-box-arrow-right"></i> Discover Music
         </a>
     </div>
     {% endif %}
@@ -76,9 +83,9 @@
     const songList = document.querySelectorAll(".song-item");
 
     function highlightCurrentSong() {
-        songList.forEach(item => item.classList.remove("bg-success", "text-white"));
+        songList.forEach(item => item.classList.remove("bg-black", "text-white"));
         if (songList[currentIndex]) {
-            songList[currentIndex].classList.add("bg-success", "text-white");
+            songList[currentIndex].classList.add("bg-black", "text-white");
         }
     }
 
@@ -102,6 +109,15 @@
         } else {
             nowPlaying.innerText = "All songs played.";
         }
+    }
+
+    function playPreviousSong() {
+        if (songs.length === 0) return;
+        currentIndex = (currentIndex - 1 + songs.length) % songs.length;
+        player.src = songs[currentIndex].url;
+        player.play();
+        updateNowPlaying();
+        highlightCurrentSong();
     }
 
     function togglePlay() {

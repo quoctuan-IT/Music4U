@@ -4,14 +4,20 @@
         <form method="get" action="{% url 'search' %}" class="row g-3 align-items-end justify-content-center">
             <!-- Search Input -->
             <div class="col-lg-4 col-md-5 col-12">
-                <label for="searchInput" class="form-label fw-semibold">Search</label>
+                <label for="searchInput" class="form-label fw-semibold">
+                    <i class="bi bi-search-heart"></i> Search
+                </label>
+                
                 <input type="text" class="form-control" id="searchInput" name="query"
                     placeholder="Enter Song title or Artist" value="{{ query }}">
             </div>
 
             <!-- Genre Filter -->
             <div class="col-lg-3 col-md-4 col-12">
-                <label for="genreSelect" class="form-label fw-semibold">Filter by Genre</label>
+                <label for="genreSelect" class="form-label fw-semibold">
+                    <i class="bi bi-funnel"></i> Filter by Genre
+                </label>
+
                 <select class="form-select" id="genreSelect" name="genre">
                     <option value="">All Genres</option>
 
@@ -27,7 +33,7 @@
             <!-- Search Button -->
             <div class="col-lg-2 col-md-3 col-6 d-grid">
                 <button type="submit" class="btn text-black" style="background-color: pink;">
-                    Search
+                    Search <i class="bi bi-search-heart"></i>
                 </button>
             </div>
         </form>
@@ -35,8 +41,8 @@
         <!-- Clear Button (when has filters) -->
         {% if query or selected_genre %}
         <div class="text-center mt-3">
-            <a href="{% url 'index' %}" class="btn btn-outline-danger btn-sm">
-                ✖️ Clear Filters
+            <a href="{% url 'index' %}" class="btn btn-outline-danger">
+                Clear Filters
             </a>
         </div>
         {% endif %}
@@ -44,13 +50,11 @@
     </div>
 
     <hr class="my-4 border-secondary">
-
 </div>
 
 
 <style>
-    @media (max-width: 575.98px) {
-
+    @media (max-width: 576px) {
         .form-control,
         .form-select {
             font-size: 16px;

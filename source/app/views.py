@@ -10,7 +10,7 @@ from .models import Song, Album, Genre, Artist
 
 
 def index(request):
-    songs = Song.objects.all().order_by("-id")[:4]  # Display newest Songs
+    songs = Song.objects.all().order_by("-id")[:5]  # Display newest
     artists = Artist.objects.all()
 
     return render(request, "index.html", {"songs": songs, "artists": artists})
@@ -47,7 +47,6 @@ def login_view(request):
 
         if user is not None:
             auth_login(request, user)
-            messages.success(request, f"Hi! {user.username}")
 
             return redirect("/")
         else:
@@ -79,7 +78,7 @@ def favorite_songs(request):
 
 # Songs
 def songs(request):
-    songs = Song.objects.all().order_by("-id")[:4]  # Display newest Songs
+    songs = Song.objects.all().order_by("-id")[:5]  # Display newest Songs
     artists = Artist.objects.all()
 
     return render(request, "app/song/index.html", {"songs": songs, "artists": artists})
@@ -194,7 +193,7 @@ def album_remove_song(request, album_id, song_id):
 
 # Artist
 def artists(request):
-    artists = Artist.objects.all().order_by("-id")[:4]
+    artists = Artist.objects.all().order_by("-id")[:5]
 
     return render(request, "app/artist/index.html", {"artists": artists})
 

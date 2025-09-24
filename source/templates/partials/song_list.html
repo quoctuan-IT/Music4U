@@ -1,4 +1,4 @@
-<div class="list-group-item song-item border-0" data-index="{{ forloop.counter0 }}">
+<div class="list-group-item song-item border" data-index="{{ forloop.counter0 }}">
     <div class="row align-items-center g-3">
 
         <!-- Song Number -->
@@ -28,7 +28,8 @@
         <!-- Remove Song to Album Button -->
         <div class="col-auto">
             <a class="btn btn-outline-danger btn-sm" href="{% url 'album_remove_song' album.id song.id %}"
-                onclick="return confirm('Are you sure to remove this song?')">Delete
+                onclick="return confirm('Are you sure to remove this song?')">
+                <i class="bi bi-x-circle"></i> Remove
             </a>
         </div>
         {% endif %}
@@ -40,18 +41,16 @@
 <style>
     a {
         text-decoration: none;
-        color: pink;
+        color: white;
     }
 
-    /* Minimal custom CSS for hover effect */
     .song-item:hover {
-        background-color: pink;
-        color: black;
         cursor: pointer;
+        background-color: black;
     }
 
     /* Responsive adjustments */
-    @media (max-width: 768px) {
+    @media (max-width: 576px) {
         .d-flex.justify-content-between {
             flex-direction: column;
             align-items: stretch !important;
