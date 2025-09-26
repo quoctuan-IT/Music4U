@@ -1,4 +1,5 @@
 ## M4U - Music Streaming Web 🎵
+## Deployment 🚀: https://phamquoctuan041203.pythonanywhere.com/
 
 A full‑stack music streaming web app that lets users browse, play, and manage songs, favorite tracks, and personal albums. It supports authentication, artist and genre browsing, search with genre filters, and a responsive audio player.
 
