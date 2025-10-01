@@ -14,6 +14,7 @@ from .models import Song, Artist, Genre, Album
 
 from .serializers import (
     SongSerializer,
+    SongWriteSerializer,
     ArtistSerializer,
     GenreSerializer,
     AlbumSerializer,
@@ -202,3 +203,62 @@ def search_songs(request):
 
     serializer = SongSerializer(songs, many=True)
     return Response(serializer.data)
+
+
+########################################
+# Admin CRUD (Song, Artist, Genre)
+########################################
+
+class IsAdmin(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_staff)
+
+
+# SONG Admin CRUD
+class AdminSongListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Song.objects.all().order_by("-created_at")
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return SongWriteSerializer
+        return SongSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(uploaded_by=self.request.user)
+
+
+class AdminSongDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Song.objects.all()
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def get_serializer_class(self):
+        if self.request.method in ["PUT", "PATCH"]:
+            return SongWriteSerializer
+        return SongSerializer
+
+
+# ARTIST Admin CRUD
+class AdminArtistListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Artist.objects.all().order_by("-id")
+    serializer_class = ArtistSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+
+class AdminArtistDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+
+# GENRE Admin CRUD
+class AdminGenreListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Genre.objects.all().order_by("-id")
+    serializer_class = GenreSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+
+class AdminGenreDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]

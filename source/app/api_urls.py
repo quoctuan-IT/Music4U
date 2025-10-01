@@ -57,4 +57,12 @@ urlpatterns = [
     ),
     # Search
     path("search/", api_views.search_songs, name="api-search"),
+
+    # Admin CRUD
+    path("admin/songs/", api_views.AdminSongListCreateAPIView.as_view(), name="api-admin-songs"),
+    path("admin/songs/<int:pk>/", api_views.AdminSongDetailAPIView.as_view(), name="api-admin-song-detail"),
+    path("admin/artists/", api_views.AdminArtistListCreateAPIView.as_view(), name="api-admin-artists"),
+    path("admin/artists/<int:pk>/", api_views.AdminArtistDetailAPIView.as_view(), name="api-admin-artist-detail"),
+    path("admin/genres/", api_views.AdminGenreListCreateAPIView.as_view(), name="api-admin-genres"),
+    path("admin/genres/<int:pk>/", api_views.AdminGenreDetailAPIView.as_view(), name="api-admin-genre-detail"),
 ]
