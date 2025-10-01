@@ -3,6 +3,10 @@
 
 A full‑stack music streaming web app that lets users browse, play, and manage songs, favorite tracks, and personal albums. It supports authentication, artist and genre browsing, search with genre filters, and a responsive audio player.
 
+**This project provides both:**
+- **Django MVC**: Traditional web app with HTML templates
+- **Django REST API**: JSON APIs for frontend integration
+
 
 ## 🚀 Features
 
@@ -21,9 +25,10 @@ A full‑stack music streaming web app that lets users browse, play, and manage 
 
 ## 🛠️ Tech Stack
 
-- Front‑end: HTML5, CSS3, Bootstrap 5
-- Back‑end: Python 3, Django 5
-- Database: MySQL
+- **Front‑end**: HTML5, CSS3, Bootstrap 5, JavaScript
+- **Back‑end**: Python 3, Django 5, Django REST Framework
+- **Database**: MySQL
+- **Authentication**: Django Session (MVC) + Token (API)
 
 
 ## 📦 Setup & Run
@@ -44,6 +49,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 # 5) Configure DB in source/project/settings.py (MySQL)
+# Ensure INSTALLED_APPS includes: 'rest_framework', 'rest_framework.authtoken'
 
 # 6) Migrate
 cd source
@@ -66,12 +72,14 @@ Static files are served in development when `DEBUG=True` with:
 Media (cover images, audio files) are stored under `source/media/`.
 
 Access:
-- App: `http://127.0.0.1:8000/`
-- Admin: `http://127.0.0.1:8000/admin/`
+- **MVC Web App**: `http://127.0.0.1:8000/`
+- **REST API**: `http://127.0.0.1:8000/api/`
+- **Admin Panel**: `http://127.0.0.1:8000/admin/`
 
 
-## 🔗 Main Routes
+## 🔗 Routes
 
+### **MVC Web App Routes**
 - Home: `/`
 - Register: `/register/`
 - Login: `/login/`
@@ -95,6 +103,37 @@ Access:
 
 - Search: `/search/?query=...&genre=<genre_id>`
 
+### **REST API Routes**
+
+#### **Authentication**
+- `POST /api/auth/register/` — Register user
+- `POST /api/auth/login/` — Login (get token)
+- `POST /api/auth/logout/` — Logout (invalidate token)
+- `GET /api/auth/profile/` — Get user profile
+
+#### **Public Endpoints**
+- `GET /api/songs/` — List songs
+- `GET /api/songs/{id}/` — Song detail
+- `GET /api/artists/` — List artists
+- `GET /api/artists/{id}/` — Artist detail
+- `GET /api/genres/` — List genres
+- `GET /api/genres/{id}/` — Genre detail
+- `GET /api/search/?query=...&genre=<id>` — Search songs
+
+#### **Authenticated Endpoints**
+- `GET /api/songs/favorites/` — List favorite songs
+- `POST /api/songs/{id}/favorite/` — Toggle favorite
+- `GET /api/albums/` — List my albums
+- `POST /api/albums/` — Create album
+- `GET|PUT|DELETE /api/albums/{id}/` — Album CRUD
+- `POST /api/albums/{album_id}/songs/{song_id}/add/` — Add song to album
+- `DELETE /api/albums/{album_id}/songs/{song_id}/remove/` — Remove song from album
+
+#### **Admin Endpoints (Staff Only)**
+- `GET|POST /api/admin/songs/` — Song CRUD
+- `GET|POST /api/admin/artists/` — Artist CRUD
+- `GET|POST /api/admin/genres/` — Genre CRUD
+
 
 ## 📚 Data Model
 
@@ -107,13 +146,31 @@ Access:
 
 ## 🎧 Player & Favorites
 
-- Favorite button uses AJAX POST to `/song/<id>/favorite/`, returns JSON `{ is_favorite: true|false }` and updates the UI (Like/Liked).
+- **MVC**: Favorite button uses AJAX POST to `/song/<id>/favorite/`, returns JSON `{ is_favorite: true|false }` and updates the UI (Like/Liked).
+- **API**: Use `POST /api/songs/{id}/favorite/` with Token authentication.
 - Audio player supports Play/Pause, Next, Previous, and artist song lists; auto‑advances to the next track on end.
 
 
 ## 🧪 Quick Test Flow
 
+### **MVC Web App**
 1) Create some `Artist`, `Genre`, `Song` via Admin.
 2) Log in as a regular user, add songs to Favorites on the song card or detail page.
 3) Create an `Album`, add songs; remove a song from album to verify the flow.
 4) Use Search with keyword and Genre filter.
+
+### **REST API**
+```bash
+# Register & Login
+curl -X POST http://127.0.0.1:8000/api/auth/register/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"test","password":"pass123","email":"test@example.com"}'
+
+curl -X POST http://127.0.0.1:8000/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username":"test","password":"pass123"}'
+
+# Use token for authenticated requests
+curl http://127.0.0.1:8000/api/songs/ \
+  -H "Authorization: Token <YOUR_TOKEN>"
+```
