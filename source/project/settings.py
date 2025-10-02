@@ -38,9 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # REST API
-    "rest_framework.authtoken",
     "rest_framework",
     "corsheaders",
+    "rest_framework_simplejwt.token_blacklist",
     # M4U
     "app",
 ]
@@ -166,8 +166,11 @@ MESSAGE_TAGS = {
 # Configure REST API
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        # Session
+        # "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.TokenAuthentication",
+        # JWT
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -176,7 +179,7 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
-        "rest_framework.renderers.BrowsableAPIRenderer",  # cần có dòng này
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
 }
 
