@@ -1,14 +1,15 @@
-from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 
 from django.shortcuts import get_object_or_404
 
-from rest_framework import generics, permissions
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
+from rest_framework import status, generics
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny, BasePermission
+
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Song, Artist, Genre, Album
 
@@ -29,20 +30,8 @@ class IndexAPIView(APIView):
         return Response({"message": "index api"})
 
 
-class LoginAPIView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
-
-        user = authenticate(username=username, password=password)
-        if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({"token": token.key, "user_id": user.id})
-
-        return Response({"error": "Invalid credentials"}, status=400)
-
+class LoginAPIView(TokenObtainPairView):
+    pass
 
 class RegisterAPIView(APIView):
     permission_classes = [AllowAny]
@@ -58,16 +47,34 @@ class RegisterAPIView(APIView):
         user = User.objects.create_user(
             username=username, password=password, email=email
         )
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({"token": token.key, "user_id": user.id})
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "user_id": user.id,
+                "message": "Register successfully!"
+            },
+            status=status.HTTP_201_CREATED,
+        )
 
 
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        request.user.auth_token.delete()
-        return Response({"message": "Logged out successfully."})
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+
+            return Response(
+                {"message": "Logged out successfully!"},
+                status=status.HTTP_205_RESET_CONTENT,
+            )
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProfileAPIView(APIView):
@@ -75,6 +82,7 @@ class ProfileAPIView(APIView):
 
     def get(self, request):
         serializer = UserSerializer(request.user)
+        
         return Response(serializer.data)
 
 
@@ -82,13 +90,13 @@ class ProfileAPIView(APIView):
 class SongListAPIView(generics.ListAPIView):
     queryset = Song.objects.all().order_by("-created_at")
     serializer_class = SongSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class SongDetailAPIView(generics.RetrieveAPIView):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class FavoriteSongListAPIView(generics.ListAPIView):
@@ -119,33 +127,33 @@ def toggle_favorite(request, song_id):
 class ArtistListAPIView(generics.ListAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class ArtistDetailAPIView(generics.RetrieveAPIView):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 # GENRES
 class GenreListAPIView(generics.ListAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 class GenreDetailAPIView(generics.RetrieveAPIView):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
 
 
 # Albums
 class AlbumListAPIView(generics.ListCreateAPIView):
     queryset = Album.objects.all()
     serializer_class = AlbumSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -153,7 +161,7 @@ class AlbumListAPIView(generics.ListCreateAPIView):
 
 class AlbumDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = AlbumSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Album.objects.filter(user=self.request.user)
@@ -182,6 +190,7 @@ def album_remove_song(request, album_id, song_id):
         return Response({"message": "Song not in album"}, status=400)
 
     album.songs.remove(song)
+
     return Response(
         {"message": f"Song '{song.title}' removed from album '{album.name}'"}
     )
@@ -202,6 +211,7 @@ def search_songs(request):
         songs = songs.filter(genres__id=genre_id)
 
     serializer = SongSerializer(songs, many=True)
+
     return Response(serializer.data)
 
 
@@ -209,7 +219,8 @@ def search_songs(request):
 # Admin CRUD (Song, Artist, Genre)
 ########################################
 
-class IsAdmin(permissions.BasePermission):
+
+class IsAdmin(BasePermission):
     def has_permission(self, request, view):
         return bool(request.user and request.user.is_staff)
 
@@ -222,6 +233,7 @@ class AdminSongListCreateAPIView(generics.ListCreateAPIView):
     def get_serializer_class(self):
         if self.request.method == "POST":
             return SongWriteSerializer
+
         return SongSerializer
 
     def perform_create(self, serializer):
@@ -235,6 +247,7 @@ class AdminSongDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         if self.request.method in ["PUT", "PATCH"]:
             return SongWriteSerializer
+
         return SongSerializer
 
 

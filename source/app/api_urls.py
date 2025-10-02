@@ -1,14 +1,23 @@
 from django.urls import path
+
 from . import api_views
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 urlpatterns = [
     # Index
     path("", api_views.IndexAPIView.as_view(), name="api-index"),
-    # Auth
-    path("auth/login/", api_views.LoginAPIView.as_view(), name="api-login"),
+    # JWT Auth
     path("auth/register/", api_views.RegisterAPIView.as_view(), name="api-register"),
+    path("auth/login/", api_views.LoginAPIView.as_view(), name="api-login"),
     path("auth/logout/", api_views.LogoutAPIView.as_view(), name="api-logout"),
     path("auth/profile/", api_views.ProfileAPIView.as_view(), name="api-profile"),
+    path("auth/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("auth/verify/", TokenVerifyView.as_view(), name="token_verify"),
     # Songs
     path("songs/", api_views.SongListAPIView.as_view(), name="api-song-list"),
     path(
@@ -57,12 +66,35 @@ urlpatterns = [
     ),
     # Search
     path("search/", api_views.search_songs, name="api-search"),
-
     # Admin CRUD
-    path("admin/songs/", api_views.AdminSongListCreateAPIView.as_view(), name="api-admin-songs"),
-    path("admin/songs/<int:pk>/", api_views.AdminSongDetailAPIView.as_view(), name="api-admin-song-detail"),
-    path("admin/artists/", api_views.AdminArtistListCreateAPIView.as_view(), name="api-admin-artists"),
-    path("admin/artists/<int:pk>/", api_views.AdminArtistDetailAPIView.as_view(), name="api-admin-artist-detail"),
-    path("admin/genres/", api_views.AdminGenreListCreateAPIView.as_view(), name="api-admin-genres"),
-    path("admin/genres/<int:pk>/", api_views.AdminGenreDetailAPIView.as_view(), name="api-admin-genre-detail"),
+    path(
+        "admin/songs/",
+        api_views.AdminSongListCreateAPIView.as_view(),
+        name="api-admin-songs",
+    ),
+    path(
+        "admin/songs/<int:pk>/",
+        api_views.AdminSongDetailAPIView.as_view(),
+        name="api-admin-song-detail",
+    ),
+    path(
+        "admin/artists/",
+        api_views.AdminArtistListCreateAPIView.as_view(),
+        name="api-admin-artists",
+    ),
+    path(
+        "admin/artists/<int:pk>/",
+        api_views.AdminArtistDetailAPIView.as_view(),
+        name="api-admin-artist-detail",
+    ),
+    path(
+        "admin/genres/",
+        api_views.AdminGenreListCreateAPIView.as_view(),
+        name="api-admin-genres",
+    ),
+    path(
+        "admin/genres/<int:pk>/",
+        api_views.AdminGenreDetailAPIView.as_view(),
+        name="api-admin-genre-detail",
+    ),
 ]

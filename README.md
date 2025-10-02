@@ -6,7 +6,8 @@
 - Deployment: `https://phamquoctuan041203.pythonanywhere.com/`
 
 ### Description
-JSON APIs for M4U music app: authentication, songs, artists, genres, albums, favorites, and search. Admin CRUD endpoints are provided for Song, Artist, Genre (require staff account).
+JSON APIs for M4U music app: JWT authentication, songs, artists, genres, albums, favorites, and search.
+Admin CRUD endpoints are provided for Song, Artist, Genre (require staff account).
 
 ---
 
@@ -28,7 +29,7 @@ python manage.py runserver
 
 ## Auth
 
-Token-based login (DRF Token):
+JWT-based authentication:
 
 ```bash
 # Register
@@ -36,18 +37,26 @@ curl -X POST http://127.0.0.1:8000/api/auth/register/ \
   -H "Content-Type: application/json" \
   -d '{"username":"user1","password":"pass123","email":"u1@example.com"}'
 
-# Login (get token)
+# Login (get JWT tokens)
 curl -X POST http://127.0.0.1:8000/api/auth/login/ \
   -H "Content-Type: application/json" \
   -d '{"username":"user1","password":"pass123"}'
 
+# Response: {"access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...", "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."}
+
 # Authenticated profile
 curl http://127.0.0.1:8000/api/auth/profile/ \
-  -H "Authorization: Token <YOUR_TOKEN>"
+  -H "Authorization: Bearer <ACCESS_TOKEN>"
 
-# Logout (invalidate token)
+# Refresh token (when access token expires)
+curl -X POST http://127.0.0.1:8000/api/auth/refresh/ \
+  -H "Content-Type: application/json" \
+  -d '{"refresh": "<REFRESH_TOKEN>"}'
+
+# Logout (blacklist refresh token)
 curl -X POST http://127.0.0.1:8000/api/auth/logout/ \
-  -H "Authorization: Token <YOUR_TOKEN>"
+  -H "Content-Type: application/json" \
+  -d '{"refresh": "<REFRESH_TOKEN>"}'
 ```
 
 ---
@@ -72,6 +81,13 @@ curl -X POST http://127.0.0.1:8000/api/auth/logout/ \
 - `POST /api/albums/{album_id}/songs/{song_id}/add/` — add song to my album
 - `DELETE /api/albums/{album_id}/songs/{song_id}/remove/` — remove song from my album
 
+### Authentication Endpoints
+- `POST /api/auth/register/` — register user
+- `POST /api/auth/login/` — login (get JWT tokens)
+- `POST /api/auth/refresh/` — refresh access token
+- `POST /api/auth/logout/` — logout (blacklist refresh token)
+- `GET /api/auth/profile/` — get user profile
+
 ### Admin (staff-only)
 - `GET|POST /api/admin/songs/` — list/create song
 - `GET|PUT|PATCH|DELETE /api/admin/songs/{id}/`
@@ -88,16 +104,16 @@ curl -X POST http://127.0.0.1:8000/api/auth/logout/ \
 ```bash
 # Toggle favorite
 curl -X POST http://127.0.0.1:8000/api/songs/1/favorite/ \
-  -H "Authorization: Token <TOKEN>"
+  -H "Authorization: Bearer <ACCESS_TOKEN>"
 
 # Create album
 curl -X POST http://127.0.0.1:8000/api/albums/ \
-  -H "Authorization: Token <TOKEN>" -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" -H "Content-Type: application/json" \
   -d '{"name":"My Favorites"}'
 
 # Admin: create song (multipart for file fields)
 curl -X POST http://127.0.0.1:8000/api/admin/songs/ \
-  -H "Authorization: Token <TOKEN>" \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
   -F "title=Hello" \
   -F "artist_id=1" \
   -F "genre_ids=1" -F "genre_ids=2" \
