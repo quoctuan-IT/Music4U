@@ -28,7 +28,7 @@ A full‑stack music streaming web app that lets users browse, play, and manage 
 - **Front‑end**: HTML5, CSS3, Bootstrap 5, JavaScript
 - **Back‑end**: Python 3, Django 5, Django REST Framework
 - **Database**: MySQL
-- **Authentication**: Django Session (MVC) + Token (API)
+- **Authentication**: Django Session (MVC) + JWT (API)
 
 
 ## 📦 Setup & Run
@@ -49,7 +49,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 
 # 5) Configure DB in source/project/settings.py (MySQL)
-# Ensure INSTALLED_APPS includes: 'rest_framework', 'rest_framework.authtoken'
+# Ensure INSTALLED_APPS includes: 'rest_framework', 'rest_framework_simplejwt'
 
 # 6) Migrate
 cd source
@@ -107,8 +107,9 @@ Access:
 
 #### **Authentication**
 - `POST /api/auth/register/` — Register user
-- `POST /api/auth/login/` — Login (get token)
-- `POST /api/auth/logout/` — Logout (invalidate token)
+- `POST /api/auth/login/` — Login (get JWT tokens)
+- `POST /api/auth/refresh/` — Refresh access token
+- `POST /api/auth/logout/` — Logout (blacklist refresh token)
 - `GET /api/auth/profile/` — Get user profile
 
 #### **Public Endpoints**
@@ -147,7 +148,7 @@ Access:
 ## 🎧 Player & Favorites
 
 - **MVC**: Favorite button uses AJAX POST to `/song/<id>/favorite/`, returns JSON `{ is_favorite: true|false }` and updates the UI (Like/Liked).
-- **API**: Use `POST /api/songs/{id}/favorite/` with Token authentication.
+- **API**: Use `POST /api/songs/{id}/favorite/` with JWT authentication.
 - Audio player supports Play/Pause, Next, Previous, and artist song lists; auto‑advances to the next track on end.
 
 
@@ -170,7 +171,24 @@ curl -X POST http://127.0.0.1:8000/api/auth/login/ \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"pass123"}'
 
-# Use token for authenticated requests
+# Response: {"access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...", "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."}
+
+# Use JWT access token for authenticated requests
 curl http://127.0.0.1:8000/api/songs/ \
-  -H "Authorization: Token <YOUR_TOKEN>"
+  -H "Authorization: Bearer <ACCESS_TOKEN>"
+
+# Refresh token when access token expires
+curl -X POST http://127.0.0.1:8000/api/auth/refresh/ \
+  -H "Content-Type: application/json" \
+  -d '{"refresh": "<REFRESH_TOKEN>"}'
+
+# Toggle favorite song
+curl -X POST http://127.0.0.1:8000/api/songs/1/favorite/ \
+  -H "Authorization: Bearer <ACCESS_TOKEN>"
+
+# Create album
+curl -X POST http://127.0.0.1:8000/api/albums/ \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"My Favorites"}'
 ```
