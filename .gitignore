@@ -17,11 +17,6 @@ ENV/
 .vscode/
 .idea/
 
-# Cursor
-.cursorignore
-.cursorindexingignore
-
 # Project specific
 staticfiles/
 media/
-NOTE.txt
